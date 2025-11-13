@@ -44,21 +44,60 @@
 
         .timeline-container {
             position: relative;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 20px;
+            padding: 20px 0 40px;
+        }
+
+        .timeline-scroll {
             overflow-x: auto;
-            padding: 40px 0;
+            padding: 12px 0;
             -webkit-overflow-scrolling: touch;
         }
 
-        .timeline {
-            display: flex;
-            min-width: max-content;
-            gap: 40px;
-            padding: 0 20px;
+        .timeline-scroll::-webkit-scrollbar {
+            height: 8px;
         }
 
-        .timeline-node {
-            flex: 0 0 auto;
-            width: 280px;
+        .timeline-scroll::-webkit-scrollbar-track {
+            background: #ecf0f1;
+            border-radius: 4px;
+        }
+
+        .timeline-scroll::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 4px;
+        }
+
+        .timeline-scroll::-webkit-scrollbar-thumb:hover {
+            background: #95a5a6;
+        }
+
+        .timeline-scroll-track {
+            height: 1px;
+        }
+
+        .timeline-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline {
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-rows: auto auto;
+            grid-auto-columns: 280px;
+            gap: 24px 32px;
+            padding: 0 20px;
+            width: max-content;
+            align-items: flex-start;
+            transform: translateX(0);
+            will-change: transform;
+        }
+
+        .timeline-top,
+        .timeline-bottom {
             background: white;
             border-radius: 15px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
@@ -67,7 +106,8 @@
             border: 1px solid #e8e8e8;
         }
 
-        .timeline-node:hover {
+        .timeline-top:hover,
+        .timeline-bottom:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 35px rgba(0,0,0,0.15);
         }
@@ -157,25 +197,55 @@
         }
 
         .variant-images {
-            margin-top: 10px;
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .variant-images-vertical {
+            align-items: center;
+        }
+
+        .variant-image {
+            background: #f1f2f6;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #dfe4ea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            aspect-ratio: 4 / 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .variant-image-single {
+            max-width: 200px;
+            margin: 0 auto;
         }
 
         .variant-image img {
             width: 100%;
             height: 100%;
-            background: #f1f2f6;
             border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7em;
-            color: #7f8c8d;
-            border: 1px solid #dfe4ea;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            object-fit: cover;
+        }
+
+        .variant-section {
+            margin-top: 20px;
+            background: #f8f9fc;
+            border: 1px solid #e1e6ef;
+            border-radius: 10px;
+            padding: 16px 14px;
+            min-height: 180px;
+        }
+
+        .variant-title {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            text-align: center;
         }
 
         .variant-image:hover {
@@ -293,28 +363,11 @@
         }
 
         /* 滚动条样式 */
-        .timeline-container::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        .timeline-container::-webkit-scrollbar-track {
-            background: #ecf0f1;
-            border-radius: 4px;
-        }
-
-        .timeline-container::-webkit-scrollbar-thumb {
-            background: #bdc3c7;
-            border-radius: 4px;
-        }
-
-        .timeline-container::-webkit-scrollbar-thumb:hover {
-            background: #95a5a6;
-        }
-
         /* 响应式设计 */
         @media (max-width: 768px) {
-            .timeline-node {
-                width: 250px;
+            .timeline {
+                grid-auto-columns: 240px;
+                gap: 20px 24px;
             }
             
             .header h1 {
@@ -346,8 +399,11 @@
         </div>
 
         <div class="timeline-container">
+            <div class="timeline-scroll" id="timelineScroll"></div>
+            <div class="timeline-wrapper">
             <div class="timeline" id="timeline">
                 <!-- 时间轴节点将通过JavaScript动态生成 -->
+                </div>
             </div>
         </div>
     </div>
@@ -601,10 +657,11 @@
             const timeline = document.getElementById('timeline');
             
             timelineData.forEach((node, index) => {
-                const nodeElement = document.createElement('div');
-                nodeElement.className = 'timeline-node';
-                
-                // 生成信息项HTML
+                const topElement = document.createElement('div');
+                topElement.className = 'timeline-top';
+                topElement.style.gridColumn = `${index + 1}`;
+                topElement.style.gridRow = '1';
+
                 const infoItemsHTML = node.info.map(item => `
                     <div class="info-item">
                         <span class="date">${item.date}</span>
@@ -612,24 +669,7 @@
                     </div>
                 `).join('');
                 
-                // 生成变种图片HTML
-                const variantsHTML = node.variants.length > 0 ? `
-                    <div class="variant-images">
-                        ${node.variants.map((variant, variantIndex) => `
-                            <div class="variant-image" 
-                                 onclick="openModal(${index}, ${variantIndex + 1})"
-                                 title="变种阵型 ${variantIndex + 1}">
-                                <img 
-                                    class="lazy-image"
-                                    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-                                    data-src="${variant}"
-                                    alt="恐怖博士第${node.number}阶段变种${variantIndex + 1}">
-                            </div>
-                        `).join('')}
-                    </div>
-                ` : '';
-                
-                nodeElement.innerHTML = `
+                topElement.innerHTML = `
                     <div class="node-number">${node.number}</div>
                     <div class="node-image" onclick="openModal(${index}, 0)">
                         <img 
@@ -638,20 +678,142 @@
                             data-src="${node.mainImage}"
                             alt="恐怖博士第${node.number}阶段主阵型">
                     </div>
+                `;
+                
+                if (node.variants.length > 0) {
+                    topElement.innerHTML += `
+                        <div class="variant-section">
+                            <div class="variant-title">变异原型</div>
+                            <div class="variant-images ${node.variants.length > 1 ? 'variant-images-vertical' : ''}">
+                        ${node.variants.map((variant, variantIndex) => `
+                                    <div class="variant-image ${node.variants.length === 1 ? 'variant-image-single' : ''}" 
+                                 onclick="openModal(${index}, ${variantIndex + 1})"
+                                 title="变种阵型 ${variantIndex + 1}">
+                                    <img 
+                                        class="lazy-image"
+                                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                                        data-src="${variant}"
+                                        alt="恐怖博士第${node.number}阶段变种${variantIndex + 1}">
+                            </div>
+                        `).join('')}
+                    </div>
+                    </div>
+                    `;
+                }
+
+                const bottomElement = document.createElement('div');
+                bottomElement.className = 'timeline-bottom';
+                bottomElement.style.gridColumn = `${index + 1}`;
+                bottomElement.style.gridRow = '2';
+                bottomElement.innerHTML = `
                     <div class="node-info">
                         ${infoItemsHTML}
-                        ${variantsHTML}
                     </div>
                 `;
                 
-                timeline.appendChild(nodeElement);
+                timeline.appendChild(topElement);
+                timeline.appendChild(bottomElement);
             });
+        }
+
+        function setupScrollSync() {
+            const timelineWrapper = document.querySelector('.timeline-wrapper');
+            const timelineScroll = document.getElementById('timelineScroll');
+            const timeline = document.getElementById('timeline');
+
+            if (!timelineWrapper || !timelineScroll || !timeline) {
+                return;
+            }
+
+            let scrollTrack = timelineScroll.querySelector('.timeline-scroll-track');
+            if (!scrollTrack) {
+                scrollTrack = document.createElement('div');
+                scrollTrack.className = 'timeline-scroll-track';
+                timelineScroll.appendChild(scrollTrack);
+            }
+
+            const updateTrackWidth = () => {
+                scrollTrack.style.width = `${timeline.scrollWidth}px`;
+            };
+
+            const updateTimelinePosition = () => {
+                timeline.style.transform = `translateX(-${timelineScroll.scrollLeft}px)`;
+            };
+
+            const updateAll = () => {
+                updateTrackWidth();
+                updateTimelinePosition();
+            };
+
+            updateAll();
+            window.updateTimelineTrackWidth = updateAll;
+
+            timelineScroll.addEventListener('scroll', () => {
+                updateTimelinePosition();
+            }, { passive: true });
+
+            window.addEventListener('resize', updateAll);
+
+            const observer = new MutationObserver(() => {
+                requestAnimationFrame(updateAll);
+            });
+
+            observer.observe(timeline, { childList: true, subtree: true });
+
+            let isPointerDown = false;
+            let lastPointerX = 0;
+
+            const handlePointerDown = (event) => {
+                if (event.pointerType === 'mouse' && event.button !== 0) {
+                    return;
+                }
+                isPointerDown = true;
+                lastPointerX = event.clientX;
+                if (timelineWrapper.setPointerCapture) {
+                    timelineWrapper.setPointerCapture(event.pointerId);
+                }
+            };
+
+            const handlePointerMove = (event) => {
+                if (!isPointerDown) {
+                    return;
+                }
+                const delta = event.clientX - lastPointerX;
+                timelineScroll.scrollLeft -= delta;
+                lastPointerX = event.clientX;
+                if (event.pointerType === 'touch' || event.pointerType === 'pen') {
+                    event.preventDefault();
+                }
+            };
+
+            const handlePointerUp = (event) => {
+                if (!isPointerDown) {
+                    return;
+                }
+                isPointerDown = false;
+                if (timelineWrapper.hasPointerCapture && timelineWrapper.hasPointerCapture(event.pointerId)) {
+                    timelineWrapper.releasePointerCapture(event.pointerId);
+                }
+            };
+
+            timelineWrapper.addEventListener('pointerdown', handlePointerDown);
+            timelineWrapper.addEventListener('pointermove', handlePointerMove);
+            timelineWrapper.addEventListener('pointerup', handlePointerUp);
+            timelineWrapper.addEventListener('pointercancel', handlePointerUp);
+            timelineWrapper.addEventListener('pointerleave', handlePointerUp);
         }
 
         // 懒加载图片
         function setupLazyLoading() {
-            const timelineContainer = document.querySelector('.timeline-container');
+            const timelineWrapper = document.querySelector('.timeline-wrapper');
+            const timelineScroll = document.getElementById('timelineScroll');
+
+            if (!timelineWrapper) {
+                return;
+            }
+
             let lazyImages = Array.from(document.querySelectorAll('.lazy-image'));
+            const scrollListenerOptions = { passive: true };
             const loadBuffer = 150; // 预加载距离，越小越精准
             let ticking = false;
 
@@ -665,7 +827,7 @@
             };
 
             const updateVisibleImages = () => {
-                const containerRect = timelineContainer.getBoundingClientRect();
+                const containerRect = timelineWrapper.getBoundingClientRect();
 
                 lazyImages = lazyImages.filter(img => {
                     const rect = img.getBoundingClientRect();
@@ -682,7 +844,9 @@
                 });
 
                 if (lazyImages.length === 0) {
-                    timelineContainer.removeEventListener('scroll', onScroll, { passive: true });
+                    if (timelineScroll) {
+                        timelineScroll.removeEventListener('scroll', onScroll, scrollListenerOptions);
+                    }
                     window.removeEventListener('resize', onResize);
                 }
 
@@ -702,10 +866,15 @@
             lazyImages.forEach(img => {
                 img.addEventListener('load', () => {
                     img.classList.add('loaded');
+                    if (typeof window.updateTimelineTrackWidth === 'function') {
+                        requestAnimationFrame(window.updateTimelineTrackWidth);
+                    }
                 }, { once: true });
             });
 
-            timelineContainer.addEventListener('scroll', onScroll, { passive: true });
+            if (timelineScroll) {
+                timelineScroll.addEventListener('scroll', onScroll, scrollListenerOptions);
+            }
             window.addEventListener('resize', onResize);
             requestUpdate();
         }
@@ -786,6 +955,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             generateTimeline();
             setupLazyLoading();
+            setupScrollSync();
             
             // 绑定事件监听器
             document.querySelector('.close').addEventListener('click', closeModal);

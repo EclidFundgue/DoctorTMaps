@@ -1,2 +1,2 @@
-# DoctorTMaps
-BoomBeach DoctorT's maps collection
+# 海岛奇兵恐怖博士阵型
+展示海岛奇兵恐怖博士（小博士）阵型

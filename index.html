@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海岛奇兵 - 恐怖博士地图信息</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .header h1 {
+            color: #34495e;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .timeline-container {
+            position: relative;
+            overflow-x: auto;
+            padding: 40px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .timeline {
+            display: flex;
+            min-width: max-content;
+            gap: 40px;
+            padding: 0 20px;
+        }
+
+        .timeline-node {
+            flex: 0 0 auto;
+            width: 280px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e8e8e8;
+        }
+
+        .timeline-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .node-number {
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 15px;
+            padding: 8px;
+            background: #ecf0f1;
+            border-radius: 10px;
+        }
+
+        .node-image {
+            width: 100%;
+            height: 180px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .node-image:hover {
+            border-color: #3498db;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .node-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .placeholder-image {
+            color: #bdc3c7;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .node-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .date {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .stage {
+            color: #e74c3c;
+            font-weight: bold;
+            background: #ffeaa7;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.9em;
+        }
+
+        .variant-images {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .variant-image img {
+            width: 100%;
+            height: 100%;
+            background: #f1f2f6;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            color: #7f8c8d;
+            border: 1px solid #dfe4ea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .variant-image:hover {
+            border-color: #3498db;
+            transform: scale(1.05);
+        }
+
+        /* 图片放大模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            display: block;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: zoomIn 0.3s ease;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 1001;
+        }
+
+        .close:hover {
+            color: #bbb;
+            transform: scale(1.1);
+        }
+
+        .modal-info {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            padding: 10px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            border-radius: 0 0 10px 10px;
+        }
+
+        .modal-stage {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .modal-date {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .navigation {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            font-size: 24px;
+            padding: 15px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .navigation:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .next {
+            right: 20px;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from { transform: translateY(-50%) scale(0.8); opacity: 0; }
+            to { transform: translateY(-50%) scale(1); opacity: 1; }
+        }
+
+        /* 滚动条样式 */
+        .timeline-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .timeline-container::-webkit-scrollbar-track {
+            background: #ecf0f1;
+            border-radius: 4px;
+        }
+
+        .timeline-container::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 4px;
+        }
+
+        .timeline-container::-webkit-scrollbar-thumb:hover {
+            background: #95a5a6;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .timeline-node {
+                width: 250px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+
+            .navigation {
+                padding: 10px 15px;
+                font-size: 18px;
+            }
+
+            .close {
+                font-size: 30px;
+                top: 10px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏝️ 海岛奇兵 - 恐怖博士地图</h1>
+            <p>水平滑动查看不同阶段的恐怖博士阵型信息 | 点击图片可放大浏览</p>
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline" id="timeline">
+                <!-- 时间轴节点将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片放大模态框 -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <button class="navigation prev">‹</button>
+        <button class="navigation next">›</button>
+        <div class="modal-content">
+            <img class="modal-image" id="modalImage">
+        </div>
+    </div>
+
+    <script>
+        // 配置数据 - 直接嵌入在HTML中
+        const timelineData = [
+            {
+                number: -13,
+                mainImage: "images/stage23.png",
+                info: [
+                    { date: "10.21", stage: "68阶" },
+                ],
+                variants: []
+            },
+            {
+                number: -12,
+                mainImage: "images/stage22.jpg",
+                info: [
+                    { date: "10.21", stage: "69阶" },
+                    { date: "10.18", stage: "66阶" },
+                ],
+                variants: []
+            },
+            {
+                number: -11,
+                mainImage: "images/stage21.jpg",
+                info: [
+                    { date: "10.21", stage: "70阶" },
+                    { date: "10.18", stage: "67阶" },
+                ],
+                variants: []
+            },
+            {
+                number: -10,
+                mainImage: "images/stage20.jpg",
+                info: [
+                    { date: "10.21", stage: "71阶" },
+                    { date: "10.28", stage: "67阶" },
+                    { date: "10.18", stage: "68阶" },
+                ],
+                variants: []
+            },
+            {
+                number: -9,
+                mainImage: "images/stage19.jpg",
+                info: [
+                    { date: "10.21", stage: "72阶" },
+                    { date: "10.28", stage: "68阶" },
+                    { date: "10.18", stage: "69阶" },
+                ],
+                variants: ["images/stage19_v1.jpg"]
+            },
+            {
+                number: -8,
+                mainImage: "images/stage18.jpg",
+                info: [
+                    { date: "11.4", stage: "65阶" },
+                    { date: "10.28", stage: "69阶" },
+                    { date: "10.25", stage: "66阶" },
+                    { date: "10.18", stage: "70阶" },
+                ],
+                variants: []
+            },
+            {
+                number: -7,
+                mainImage: "images/stage17.jpg",
+                info: [
+                    { date: "11.4", stage: "66阶" },
+                    { date: "10.28", stage: "70阶" },
+                    { date: "10.25", stage: "67阶" },
+                    { date: "10.18", stage: "71阶" },
+                ],
+                variants: ["images/stage17_v1.jpg"]
+            },
+            {
+                number: -6,
+                mainImage: "images/stage13.png",
+                info: [
+                    { date: "11.4", stage: "67阶" },
+                    { date: "10.28", stage: "71阶" },
+                    { date: "10.25", stage: "68阶" },
+                    { date: "10.18", stage: "72阶" },
+                ],
+                variants: []
+            },
+            {
+                number: -5,
+                mainImage: "images/stage14.jpg",
+                info: [
+                    { date: "11.4", stage: "68阶" },
+                    { date: "10.28", stage: "72阶" },
+                    { date: "10.25", stage: "69阶" },
+                ],
+                variants: []
+            },
+            {
+                number: -4,
+                mainImage: "images/stage15.jpg",
+                info: [
+                    { date: "11.4", stage: "69阶" },
+                    { date: "10.28", stage: "73阶" },
+                ],
+                variants: ["images/stage15_v1.jpg"]
+            },
+            {
+                number: -3,
+                mainImage: "images/stage16.jpg",
+                info: [
+                    { date: "11.4", stage: "70阶" },
+                    { date: "11.1", stage: "67阶" },
+                ],
+                variants: []
+            },
+            {
+                number: -2,
+                mainImage: "images/stage10.jpg",
+                info: [
+                    { date: "11.11", stage: "67阶" },
+                    { date: "11.4", stage: "71阶" },
+                    { date: "11.1", stage: "68阶" },
+                ],
+                variants: []
+            },
+            {
+                number: -1,
+                mainImage: "images/stage9.png",
+                info: [
+                    { date: "11.11", stage: "68阶" },
+                    { date: "11.4", stage: "72阶" },
+                    { date: "11.1", stage: "69阶" },
+                ],
+                variants: ["images/stage9_v1.jpg"]
+            },
+            {
+                number: 0,
+                mainImage: "images/stage8.png",
+                info: [
+                    { date: "11.11", stage: "69阶" },
+                    { date: "11.4", stage: "73阶" },
+                    { date: "11.1", stage: "70阶" },
+                ],
+                variants: ["images/stage8_v1.jpg"]
+            },
+            {
+                number: 1,
+                mainImage: "images/stage1.jpg",
+                info: [
+                    { date: "11.11", stage: "70阶" },
+                    { date: "11.8", stage: "67阶" },
+                    { date: "11.4", stage: "74阶" },
+                    { date: "11.1", stage: "71阶" },
+                ],
+                variants: ["images/stage1_v1.png"]
+            },
+            {
+                number: 2,
+                mainImage: "images/stage2.png",
+                info: [
+                    { date: "11.11", stage: "71阶" },
+                    { date: "11.8", stage: "68阶" },
+                    { date: "11.1", stage: "72阶" },
+                ],
+                variants: []
+            },
+            {
+                number: 3,
+                mainImage: "images/stage3.png",
+                info: [
+                    { date: "11.11", stage: "72阶" },
+                    { date: "11.8", stage: "69阶" },
+                    { date: "11.1", stage: "73阶" },
+                ],
+                variants: []
+            },
+            {
+                number: 4,
+                mainImage: "images/stage4.png",
+                info: [
+                    { date: "11.11", stage: "73阶" },
+                    { date: "11.8", stage: "70阶" },
+                    { date: "11.1", stage: "74阶" },
+                ],
+                variants: ["images/stage4_v1.jpg"]
+            },
+            {
+                number: 5,
+                mainImage: "images/stage5.png",
+                info: [
+                    { date: "11.11", stage: "74阶" },
+                    { date: "11.8", stage: "71阶" },
+                ],
+                variants: ["images/stage5_v1.jpg"]
+            },
+            {
+                number: 6,
+                mainImage: "images/stage6.png",
+                info: [
+                    { date: "11.11", stage: "75阶" },
+                    { date: "11.8", stage: "72阶" },
+                ],
+                variants: ["images/stage6_v1.png"]
+            },
+            {
+                number: 7,
+                mainImage: "images/stage7.png",
+                info: [
+                    { date: "11.11", stage: "76阶" },
+                    { date: "11.8", stage: "73阶" },
+                ],
+                variants: []
+            },
+            {
+                number: 8,
+                mainImage: "images/stage11.png",
+                info: [
+                    { date: "11.8", stage: "74阶" },
+                ],
+                variants: []
+            },
+            {
+                number: 9,
+                mainImage: "images/stage12.png",
+                info: [
+                    { date: "11.8", stage: "75阶" },
+                ],
+                variants: []
+            },
+        ];
+
+        // 全局变量
+        let currentImageIndex = 0;
+        let currentImages = [];
+
+        timelineData.forEach((node, index) => {
+            node.number += 14
+        })
+
+        // 生成时间轴HTML
+        function generateTimeline() {
+            const timeline = document.getElementById('timeline');
+            
+            timelineData.forEach((node, index) => {
+                const nodeElement = document.createElement('div');
+                nodeElement.className = 'timeline-node';
+                
+                // 生成信息项HTML
+                const infoItemsHTML = node.info.map(item => `
+                    <div class="info-item">
+                        <span class="date">${item.date}</span>
+                        <span class="stage">${item.stage}</span>
+                    </div>
+                `).join('');
+                
+                // 生成变种图片HTML
+                const variantsHTML = node.variants.length > 0 ? `
+                    <div class="variant-images">
+                        ${node.variants.map((variant, variantIndex) => `
+                            <div class="variant-image" 
+                                 onclick="openModal(${index}, ${variantIndex + 1})"
+                                 title="变种阵型 ${variantIndex + 1}">
+                                <img src=${node.variants[variantIndex]}>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : '';
+                
+                nodeElement.innerHTML = `
+                    <div class="node-number">${node.number}</div>
+                    <div class="node-image" onclick="openModal(${index}, 0)">
+                        <img src=${node.mainImage}>
+                    </div>
+                    <div class="node-info">
+                        ${infoItemsHTML}
+                        ${variantsHTML}
+                    </div>
+                `;
+                
+                timeline.appendChild(nodeElement);
+            });
+        }
+
+        // 打开图片模态框
+        function openModal(nodeIndex, imageType) {
+            const node = timelineData[nodeIndex];
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+
+            // 构建图片数组：主图片 + 所有变种图片
+            currentImages = [node.mainImage];
+            currentImages = currentImages.concat(node.variants);
+            
+            // 设置当前图片索引
+            currentImageIndex = imageType;
+
+            // 更新模态框内容
+            updateModalContent(nodeIndex);
+
+            // 显示模态框
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // 禁止背景滚动
+        }
+
+        // 更新模态框内容
+        function updateModalContent(nodeIndex) {
+            const node = timelineData[nodeIndex];
+            const modalImage = document.getElementById('modalImage');
+
+            // 设置图片
+            modalImage.src = currentImages[currentImageIndex];
+            modalImage.alt = `恐怖博士第${node.number}阶段${currentImageIndex === 0 ? '主阵型' : '变种' + currentImageIndex}`;
+        }
+
+        // 导航到上一张图片
+        function prevImage(nodeIndex) {
+            currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+            updateModalContent(nodeIndex);
+        }
+
+        // 导航到下一张图片
+        function nextImage(nodeIndex) {
+            currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+            updateModalContent(nodeIndex);
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // 恢复背景滚动
+        }
+
+        // 键盘事件支持
+        function handleKeyDown(event) {
+            const modal = document.getElementById('imageModal');
+            if (modal.style.display === 'block') {
+                const nodeIndex = timelineData.findIndex(node => 
+                    currentImages.includes(node.mainImage)
+                );
+                
+                switch(event.key) {
+                    case 'Escape':
+                        closeModal();
+                        break;
+                    case 'ArrowLeft':
+                        prevImage(nodeIndex);
+                        break;
+                    case 'ArrowRight':
+                        nextImage(nodeIndex);
+                        break;
+                }
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            generateTimeline();
+            
+            // 绑定事件监听器
+            document.querySelector('.close').addEventListener('click', closeModal);
+            document.querySelector('.prev').addEventListener('click', function() {
+                const nodeIndex = timelineData.findIndex(node => 
+                    currentImages.includes(node.mainImage)
+                );
+                prevImage(nodeIndex);
+            });
+            document.querySelector('.next').addEventListener('click', function() {
+                const nodeIndex = timelineData.findIndex(node => 
+                    currentImages.includes(node.mainImage)
+                );
+                nextImage(nodeIndex);
+            });
+            
+            // 点击模态框背景关闭
+            document.getElementById('imageModal').addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closeModal();
+                }
+            });
+
+            // 键盘事件
+            document.addEventListener('keydown', handleKeyDown);
+        });
+    </script>
+</body>
+</html>

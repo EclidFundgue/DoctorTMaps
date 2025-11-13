@@ -761,15 +761,21 @@
             observer.observe(timeline, { childList: true, subtree: true });
 
             let isPointerDown = false;
-            let lastPointerX = 0;
+            let startPointerX = 0;
+            let dragStarted = false;
+            let pointerType = '';
+            let initialScrollLeft = 0;
 
             const handlePointerDown = (event) => {
                 if (event.pointerType === 'mouse' && event.button !== 0) {
                     return;
                 }
                 isPointerDown = true;
-                lastPointerX = event.clientX;
-                if (timelineWrapper.setPointerCapture) {
+                startPointerX = event.clientX;
+                dragStarted = false;
+                pointerType = event.pointerType;
+                initialScrollLeft = timelineScroll ? timelineScroll.scrollLeft : 0;
+                if (pointerType !== 'mouse' && timelineWrapper.setPointerCapture) {
                     timelineWrapper.setPointerCapture(event.pointerId);
                 }
             };
@@ -778,10 +784,14 @@
                 if (!isPointerDown) {
                     return;
                 }
-                const delta = event.clientX - lastPointerX;
-                timelineScroll.scrollLeft -= delta;
-                lastPointerX = event.clientX;
-                if (event.pointerType === 'touch' || event.pointerType === 'pen') {
+                const moveX = event.clientX - startPointerX;
+                if (!dragStarted && Math.abs(moveX) > 5) {
+                    dragStarted = true;
+                }
+                if (dragStarted && timelineScroll) {
+                    timelineScroll.scrollLeft = initialScrollLeft - moveX;
+                }
+                if (dragStarted && (pointerType === 'touch' || pointerType === 'pen')) {
                     event.preventDefault();
                 }
             };
@@ -791,7 +801,8 @@
                     return;
                 }
                 isPointerDown = false;
-                if (timelineWrapper.hasPointerCapture && timelineWrapper.hasPointerCapture(event.pointerId)) {
+                dragStarted = false;
+                if (pointerType !== 'mouse' && timelineWrapper.hasPointerCapture && timelineWrapper.hasPointerCapture(event.pointerId)) {
                     timelineWrapper.releasePointerCapture(event.pointerId);
                 }
             };

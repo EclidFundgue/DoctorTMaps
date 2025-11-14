@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>海岛奇兵 - 恐怖博士地图信息</title>
+    <title>海岛奇兵 - 恐怖博士热带岛地图&打法合集</title>
     <style>
         * {
             margin: 0;
@@ -176,10 +176,10 @@
 
         .video-tooltip {
             position: absolute;
-            top: 50%;
+            top: -105%;
             left: calc(100% + 12px);
             width: 350px;
-            max-height: 300px;
+            max-height: 255px;
             background: #ffffff;
             border: 1px solid #e1e8ed;
             border-radius: 8px;
@@ -190,7 +190,7 @@
             opacity: 0;
             visibility: hidden;
             transform: translateY(-50%) translateX(6px);
-            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+            transition: opacity 0.1s ease, transform 0.1s ease, visibility 0.1s;
             z-index: 50;
             display: flex;
             flex-direction: column;
@@ -235,7 +235,7 @@
             flex: 1;
             min-height: 0;
             min-height: 60px;
-            max-height: 200px;
+            max-height: 250px;
         }
 
         /* 滚动条样式 */
@@ -260,7 +260,7 @@
         .video-list {
             list-style: none;
             margin: 0;
-            padding: 8px;
+            padding: 8px 8px 0px 8px;
             display: flex;
             flex-direction: column;
             gap: 6px;
@@ -298,8 +298,7 @@
 
         .up-info {
             margin-top: 8px;
-            padding: 6px 0;
-            border-top: 1px dashed #e1e8ed;
+            padding: 0px 0px 6px 18px;
             font-size: 0.85em;
             color: #666;
             display: flex;
@@ -584,7 +583,6 @@
                                         </a>
                                         <div class="up-info">
                                             <div class="up-details">
-                                                UP主: 
                                                 <div class="up-avatar">
                                                     <a href="${_info.up.homePage}"
                                                     target="_blank" 

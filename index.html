@@ -20,7 +20,6 @@
         }
 
         .container {
-            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -47,7 +46,8 @@
             display: grid;
             grid-template-rows: auto 1fr;
             gap: 20px;
-            padding: 20px 0 40px;
+            padding-left: 50px;
+            padding-right: 50px;
         }
 
         .timeline-scroll {
@@ -89,7 +89,6 @@
             grid-template-rows: auto auto;
             grid-auto-columns: 280px;
             gap: 24px 32px;
-            padding: 0 20px;
             width: max-content;
             align-items: flex-start;
             transform: translateX(0);
@@ -149,21 +148,6 @@
             object-fit: cover;
         }
 
-        .lazy-image {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .lazy-image.loaded {
-            opacity: 1;
-        }
-
-        .placeholder-image {
-            color: #bdc3c7;
-            font-size: 0.9em;
-            text-align: center;
-        }
-
         .node-info {
             background: #f8f9fa;
             border-radius: 8px;
@@ -188,7 +172,7 @@
         }
 
         .stage {
-            color: #e74c3c;
+            color: #7d7d7d;
             font-weight: bold;
             background: #ffeaa7;
             padding: 2px 8px;
@@ -200,9 +184,6 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-        }
-
-        .variant-images-vertical {
             align-items: center;
         }
 
@@ -217,11 +198,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .variant-image-single {
-            max-width: 200px;
-            margin: 0 auto;
         }
 
         .variant-image img {
@@ -302,55 +278,6 @@
             transform: scale(1.1);
         }
 
-        .modal-info {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            color: white;
-            padding: 10px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.7));
-            border-radius: 0 0 10px 10px;
-        }
-
-        .modal-stage {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .modal-date {
-            font-size: 1em;
-            opacity: 0.9;
-        }
-
-        .navigation {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            font-size: 24px;
-            padding: 15px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .navigation:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .prev {
-            left: 20px;
-        }
-
-        .next {
-            right: 20px;
-        }
-
         /* 动画效果 */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -362,8 +289,6 @@
             to { transform: translateY(-50%) scale(1); opacity: 1; }
         }
 
-        /* 滚动条样式 */
-        /* 响应式设计 */
         @media (max-width: 768px) {
             .timeline {
                 grid-auto-columns: 240px;
@@ -376,11 +301,6 @@
 
             .modal-content {
                 width: 95%;
-            }
-
-            .navigation {
-                padding: 10px 15px;
-                font-size: 18px;
             }
 
             .close {
@@ -411,246 +331,15 @@
     <!-- 图片放大模态框 -->
     <div id="imageModal" class="modal">
         <span class="close">&times;</span>
-        <button class="navigation prev">‹</button>
-        <button class="navigation next">›</button>
         <div class="modal-content">
             <img class="modal-image" id="modalImage">
         </div>
     </div>
 
+    <!-- 配置数据 -->
+    <script src="data.js"></script>
     <script>
-        // 配置数据 - 直接嵌入在HTML中
-        const timelineData = [
-            {
-                number: -13,
-                mainImage: "images/stage23.jpg",
-                info: [
-                    { date: "10.21", stage: "68阶" },
-                ],
-                variants: []
-            },
-            {
-                number: -12,
-                mainImage: "images/stage22.jpg",
-                info: [
-                    { date: "10.21", stage: "69阶" },
-                    { date: "10.18", stage: "66阶" },
-                ],
-                variants: []
-            },
-            {
-                number: -11,
-                mainImage: "images/stage21.jpg",
-                info: [
-                    { date: "10.21", stage: "70阶" },
-                    { date: "10.18", stage: "67阶" },
-                ],
-                variants: []
-            },
-            {
-                number: -10,
-                mainImage: "images/stage20.jpg",
-                info: [
-                    { date: "10.21", stage: "71阶" },
-                    { date: "10.28", stage: "67阶" },
-                    { date: "10.18", stage: "68阶" },
-                ],
-                variants: []
-            },
-            {
-                number: -9,
-                mainImage: "images/stage19.jpg",
-                info: [
-                    { date: "10.21", stage: "72阶" },
-                    { date: "10.28", stage: "68阶" },
-                    { date: "10.18", stage: "69阶" },
-                ],
-                variants: ["images/stage19_v1.jpg"]
-            },
-            {
-                number: -8,
-                mainImage: "images/stage18.jpg",
-                info: [
-                    { date: "11.4", stage: "65阶" },
-                    { date: "10.28", stage: "69阶" },
-                    { date: "10.25", stage: "66阶" },
-                    { date: "10.18", stage: "70阶" },
-                ],
-                variants: []
-            },
-            {
-                number: -7,
-                mainImage: "images/stage17.jpg",
-                info: [
-                    { date: "11.4", stage: "66阶" },
-                    { date: "10.28", stage: "70阶" },
-                    { date: "10.25", stage: "67阶" },
-                    { date: "10.18", stage: "71阶" },
-                ],
-                variants: ["images/stage17_v1.jpg"]
-            },
-            {
-                number: -6,
-                mainImage: "images/stage13.jpg",
-                info: [
-                    { date: "11.4", stage: "67阶" },
-                    { date: "10.28", stage: "71阶" },
-                    { date: "10.25", stage: "68阶" },
-                    { date: "10.18", stage: "72阶" },
-                ],
-                variants: []
-            },
-            {
-                number: -5,
-                mainImage: "images/stage14.jpg",
-                info: [
-                    { date: "11.4", stage: "68阶" },
-                    { date: "10.28", stage: "72阶" },
-                    { date: "10.25", stage: "69阶" },
-                ],
-                variants: []
-            },
-            {
-                number: -4,
-                mainImage: "images/stage15.jpg",
-                info: [
-                    { date: "11.4", stage: "69阶" },
-                    { date: "10.28", stage: "73阶" },
-                ],
-                variants: ["images/stage15_v1.jpg"]
-            },
-            {
-                number: -3,
-                mainImage: "images/stage16.jpg",
-                info: [
-                    { date: "11.4", stage: "70阶" },
-                    { date: "11.1", stage: "67阶" },
-                ],
-                variants: []
-            },
-            {
-                number: -2,
-                mainImage: "images/stage10.jpg",
-                info: [
-                    { date: "11.11", stage: "67阶" },
-                    { date: "11.4", stage: "71阶" },
-                    { date: "11.1", stage: "68阶" },
-                ],
-                variants: []
-            },
-            {
-                number: -1,
-                mainImage: "images/stage9.jpg",
-                info: [
-                    { date: "11.11", stage: "68阶" },
-                    { date: "11.4", stage: "72阶" },
-                    { date: "11.1", stage: "69阶" },
-                ],
-                variants: ["images/stage9_v1.jpg"]
-            },
-            {
-                number: 0,
-                mainImage: "images/stage8.jpg",
-                info: [
-                    { date: "11.11", stage: "69阶" },
-                    { date: "11.4", stage: "73阶" },
-                    { date: "11.1", stage: "70阶" },
-                ],
-                variants: ["images/stage8_v1.jpg"]
-            },
-            {
-                number: 1,
-                mainImage: "images/stage1.jpg",
-                info: [
-                    { date: "11.11", stage: "70阶" },
-                    { date: "11.8", stage: "67阶" },
-                    { date: "11.4", stage: "74阶" },
-                    { date: "11.1", stage: "71阶" },
-                ],
-                variants: ["images/stage1_v1.jpg"]
-            },
-            {
-                number: 2,
-                mainImage: "images/stage2.jpg",
-                info: [
-                    { date: "11.11", stage: "71阶" },
-                    { date: "11.8", stage: "68阶" },
-                    { date: "11.1", stage: "72阶" },
-                ],
-                variants: []
-            },
-            {
-                number: 3,
-                mainImage: "images/stage3.jpg",
-                info: [
-                    { date: "11.11", stage: "72阶" },
-                    { date: "11.8", stage: "69阶" },
-                    { date: "11.1", stage: "73阶" },
-                ],
-                variants: []
-            },
-            {
-                number: 4,
-                mainImage: "images/stage4.jpg",
-                info: [
-                    { date: "11.11", stage: "73阶" },
-                    { date: "11.8", stage: "70阶" },
-                    { date: "11.1", stage: "74阶" },
-                ],
-                variants: ["images/stage4_v1.jpg"]
-            },
-            {
-                number: 5,
-                mainImage: "images/stage5.jpg",
-                info: [
-                    { date: "11.11", stage: "74阶" },
-                    { date: "11.8", stage: "71阶" },
-                ],
-                variants: ["images/stage5_v1.jpg"]
-            },
-            {
-                number: 6,
-                mainImage: "images/stage6.jpg",
-                info: [
-                    { date: "11.11", stage: "75阶" },
-                    { date: "11.8", stage: "72阶" },
-                ],
-                variants: ["images/stage6_v1.jpg"]
-            },
-            {
-                number: 7,
-                mainImage: "images/stage7.jpg",
-                info: [
-                    { date: "11.11", stage: "76阶" },
-                    { date: "11.8", stage: "73阶" },
-                ],
-                variants: []
-            },
-            {
-                number: 8,
-                mainImage: "images/stage11.jpg",
-                info: [
-                    { date: "11.8", stage: "74阶" },
-                ],
-                variants: []
-            },
-            {
-                number: 9,
-                mainImage: "images/stage12.jpg",
-                info: [
-                    { date: "11.8", stage: "75阶" },
-                ],
-                variants: []
-            },
-        ];
-
-        // 全局变量
-        let currentImageIndex = 0;
-        let currentImages = [];
-
-        timelineData.forEach((node, index) => {
-            node.number += 14
-        })
+        let currentImageUrl = null;
 
         // 生成时间轴HTML
         function generateTimeline() {
@@ -661,6 +350,29 @@
                 topElement.className = 'timeline-top';
                 topElement.style.gridColumn = `${index + 1}`;
                 topElement.style.gridRow = '1';
+                
+                topElement.innerHTML = `
+                    <div class="node-number">${index + 1}</div>
+                    <div class="node-image" onclick="openModal(${index}, 0)">
+                        <img src="${node.mainImage}">
+                    </div>
+                `;
+                
+                if (node.variants.length > 0) {
+                    const variantsHTML = node.variants.map((variant, variantIndex) => `
+                        <div class="variant-image"
+                             onclick="openModal(${index}, ${variantIndex + 1})"
+                             title="变种阵型 ${variantIndex + 1}">
+                            <img src="${variant}">
+                        </div>
+                    `).join('')
+                    topElement.innerHTML += `
+                        <div class="variant-section">
+                            <div class="variant-title">变异原型</div>
+                            <div class="variant-images"> ${variantsHTML} </div>
+                        </div>
+                    `;
+                }
 
                 const infoItemsHTML = node.info.map(item => `
                     <div class="info-item">
@@ -668,38 +380,6 @@
                         <span class="stage">${item.stage}</span>
                     </div>
                 `).join('');
-                
-                topElement.innerHTML = `
-                    <div class="node-number">${node.number}</div>
-                    <div class="node-image" onclick="openModal(${index}, 0)">
-                        <img 
-                            class="lazy-image"
-                            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-                            data-src="${node.mainImage}"
-                            alt="恐怖博士第${node.number}阶段主阵型">
-                    </div>
-                `;
-                
-                if (node.variants.length > 0) {
-                    topElement.innerHTML += `
-                        <div class="variant-section">
-                            <div class="variant-title">变异原型</div>
-                            <div class="variant-images ${node.variants.length > 1 ? 'variant-images-vertical' : ''}">
-                        ${node.variants.map((variant, variantIndex) => `
-                                    <div class="variant-image ${node.variants.length === 1 ? 'variant-image-single' : ''}" 
-                                 onclick="openModal(${index}, ${variantIndex + 1})"
-                                 title="变种阵型 ${variantIndex + 1}">
-                                    <img 
-                                        class="lazy-image"
-                                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-                                        data-src="${variant}"
-                                        alt="恐怖博士第${node.number}阶段变种${variantIndex + 1}">
-                            </div>
-                        `).join('')}
-                    </div>
-                    </div>
-                    `;
-                }
 
                 const bottomElement = document.createElement('div');
                 bottomElement.className = 'timeline-bottom';
@@ -814,123 +494,23 @@
             timelineWrapper.addEventListener('pointerleave', handlePointerUp);
         }
 
-        // 懒加载图片
-        function setupLazyLoading() {
-            const timelineWrapper = document.querySelector('.timeline-wrapper');
-            const timelineScroll = document.getElementById('timelineScroll');
-
-            if (!timelineWrapper) {
-                return;
-            }
-
-            let lazyImages = Array.from(document.querySelectorAll('.lazy-image'));
-            const scrollListenerOptions = { passive: true };
-            const loadBuffer = 150; // 预加载距离，越小越精准
-            let ticking = false;
-
-            const loadImage = (img) => {
-                if (!img.dataset.src) {
-                    return false;
-                }
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-                return true;
-            };
-
-            const updateVisibleImages = () => {
-                const containerRect = timelineWrapper.getBoundingClientRect();
-
-                lazyImages = lazyImages.filter(img => {
-                    const rect = img.getBoundingClientRect();
-                    const horizontallyVisible = rect.right >= containerRect.left - loadBuffer &&
-                        rect.left <= containerRect.right + loadBuffer;
-                    const verticallyVisible = rect.bottom >= containerRect.top - loadBuffer &&
-                        rect.top <= containerRect.bottom + loadBuffer;
-
-                    if (horizontallyVisible && verticallyVisible) {
-                        return !loadImage(img);
-                    }
-
-                    return true;
-                });
-
-                if (lazyImages.length === 0) {
-                    if (timelineScroll) {
-                        timelineScroll.removeEventListener('scroll', onScroll, scrollListenerOptions);
-                    }
-                    window.removeEventListener('resize', onResize);
-                }
-
-                ticking = false;
-            };
-
-            const requestUpdate = () => {
-                if (!ticking) {
-                    ticking = true;
-                    requestAnimationFrame(updateVisibleImages);
-                }
-            };
-
-            const onScroll = () => requestUpdate();
-            const onResize = () => requestUpdate();
-
-            lazyImages.forEach(img => {
-                img.addEventListener('load', () => {
-                    img.classList.add('loaded');
-                    if (typeof window.updateTimelineTrackWidth === 'function') {
-                        requestAnimationFrame(window.updateTimelineTrackWidth);
-                    }
-                }, { once: true });
-            });
-
-            if (timelineScroll) {
-                timelineScroll.addEventListener('scroll', onScroll, scrollListenerOptions);
-            }
-            window.addEventListener('resize', onResize);
-            requestUpdate();
-        }
-
         // 打开图片模态框
         function openModal(nodeIndex, imageType) {
             const node = timelineData[nodeIndex];
             const modal = document.getElementById('imageModal');
             const modalImage = document.getElementById('modalImage');
 
-            // 构建图片数组：主图片 + 所有变种图片
-            currentImages = [node.mainImage];
-            currentImages = currentImages.concat(node.variants);
-            
-            // 设置当前图片索引
-            currentImageIndex = imageType;
-
-            // 更新模态框内容
-            updateModalContent(nodeIndex);
+            // 设置模态框图片
+            if (imageType == 0) {
+                modalImage.src = node.mainImage;
+            }
+            else {
+                modalImage.src = node.variants[imageType - 1]
+            }
 
             // 显示模态框
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden'; // 禁止背景滚动
-        }
-
-        // 更新模态框内容
-        function updateModalContent(nodeIndex) {
-            const node = timelineData[nodeIndex];
-            const modalImage = document.getElementById('modalImage');
-
-            // 设置图片
-            modalImage.src = currentImages[currentImageIndex];
-            modalImage.alt = `恐怖博士第${node.number}阶段${currentImageIndex === 0 ? '主阵型' : '变种' + currentImageIndex}`;
-        }
-
-        // 导航到上一张图片
-        function prevImage(nodeIndex) {
-            currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
-            updateModalContent(nodeIndex);
-        }
-
-        // 导航到下一张图片
-        function nextImage(nodeIndex) {
-            currentImageIndex = (currentImageIndex + 1) % currentImages.length;
-            updateModalContent(nodeIndex);
         }
 
         // 关闭模态框
@@ -940,58 +520,19 @@
             document.body.style.overflow = 'auto'; // 恢复背景滚动
         }
 
-        // 键盘事件支持
-        function handleKeyDown(event) {
-            const modal = document.getElementById('imageModal');
-            if (modal.style.display === 'block') {
-                const nodeIndex = timelineData.findIndex(node => 
-                    currentImages.includes(node.mainImage)
-                );
-                
-                switch(event.key) {
-                    case 'Escape':
-                        closeModal();
-                        break;
-                    case 'ArrowLeft':
-                        prevImage(nodeIndex);
-                        break;
-                    case 'ArrowRight':
-                        nextImage(nodeIndex);
-                        break;
-                }
-            }
-        }
-
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
             generateTimeline();
-            setupLazyLoading();
             setupScrollSync();
             
-            // 绑定事件监听器
+            // 关闭模态框
             document.querySelector('.close').addEventListener('click', closeModal);
-            document.querySelector('.prev').addEventListener('click', function() {
-                const nodeIndex = timelineData.findIndex(node => 
-                    currentImages.includes(node.mainImage)
-                );
-                prevImage(nodeIndex);
-            });
-            document.querySelector('.next').addEventListener('click', function() {
-                const nodeIndex = timelineData.findIndex(node => 
-                    currentImages.includes(node.mainImage)
-                );
-                nextImage(nodeIndex);
-            });
-            
-            // 点击模态框背景关闭
+            // 点击背景关闭模态框
             document.getElementById('imageModal').addEventListener('click', function(event) {
                 if (event.target === this) {
                     closeModal();
                 }
             });
-
-            // 键盘事件
-            document.addEventListener('keydown', handleKeyDown);
         });
     </script>
 </body>

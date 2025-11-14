@@ -84,6 +84,7 @@
             overflow: hidden;
         }
 
+        /* 默认（桌面/横屏）时间轴：横向 grid */
         .timeline {
             display: grid;
             grid-auto-flow: column;
@@ -94,6 +95,11 @@
             align-items: flex-start;
             transform: translateX(0);
             will-change: transform;
+        }
+
+        /* 新增：timeline-item 包装（在竖屏生效，但桌面也保留样式） */
+        .timeline-item {
+            display: contents; /* 默认不影响桌面布局 */
         }
 
         .timeline-top,
@@ -289,7 +295,6 @@
             font-size: 0.9em;
             padding: 16px;
             text-align: center;
-            /* 在空状态下也需要高度限制 */
             height: 100%;
             display: flex;
             align-items: center;
@@ -484,6 +489,7 @@
             to { transform: translateY(-50%) scale(1); opacity: 1; }
         }
 
+        /* 常规小屏优化（保留横向时间轴的紧凑样式） */
         @media (max-width: 768px) {
             .timeline {
                 grid-auto-columns: 240px;
@@ -536,7 +542,7 @@
                 padding-right: 15px;
             }
             
-            /* 时间轴布局调整为更适合移动端的尺寸 */
+            /* 时间轴布局调整为更适合移动端的尺寸（默认仍为横向滚动） */
             .timeline {
                 grid-auto-columns: 85vw; /* 使用视口宽度单位 */
                 gap: 15px 20px;
@@ -648,6 +654,109 @@
                 width: 250px;
             }
         }
+
+        /* ========== 竖屏专有适配（portrait） ========== */
+        @media (orientation: portrait) and (max-width: 900px) {
+            /* 把时间轴改为纵向卡片列表 */
+            .timeline {
+                display: flex !important;
+                flex-direction: column;
+                width: 100% !important;
+                gap: 16px !important;
+                transform: none !important;
+            }
+
+            /* 每个节点作为一个块（便于纵向排列和内边距） */
+            .timeline-item {
+                display: block;
+                width: 100%;
+            }
+
+            /* 将 top 与 bottom 作为堆叠的两块内容 */
+            .timeline-top,
+            .timeline-bottom {
+                width: 100%;
+                box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+                border-radius: 12px;
+            }
+
+            .timeline-top {
+                margin-bottom: 10px;
+            }
+
+            /* 隐藏横向滚动轨道，因为竖屏不用横向同步 */
+            .timeline-scroll {
+                display: none;
+            }
+
+            /* Tooltip 改为内联展示（触控友好） */
+            .video-tooltip {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                border: none;
+                background: transparent;
+                padding: 0;
+                max-height: none;
+            }
+
+            .video-tooltip .video-tooltip-title {
+                display: none;
+            }
+
+            .video-scroll-container {
+                border: 1px solid #e6edf3;
+                background: #fff;
+                border-radius: 8px;
+                padding: 8px;
+                max-height: 260px;
+                margin-top: 8px;
+            }
+
+            .info-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+            .info-item > .date,
+            .info-item > .stage {
+                display: inline-block;
+            }
+
+            .node-image {
+                height: auto;
+                aspect-ratio: 4 / 3;
+            }
+
+            /* 模态框在竖屏下优化为更贴合全屏预览 */
+            .modal-content {
+                width: 100%;
+                height: 100%;
+                max-width: none;
+                max-height: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                top: 0;
+                transform: none;
+            }
+
+            .modal-image {
+                max-width: 96vw;
+                max-height: 92vh;
+                border-radius: 8px;
+            }
+
+            .close {
+                top: 18px;
+                right: 18px;
+                font-size: 32px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -680,31 +789,32 @@
     <script>
         let currentImageUrl = null;
 
-        // 生成时间轴HTML
+        // 生成时间轴HTML（改为以 .timeline-item 包裹每个节点）
         function generateTimeline() {
             const timeline = document.getElementById('timeline');
-            
+            timeline.innerHTML = ''; // 先清空
             timelineData.forEach((node, index) => {
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = 'timeline-item';
+
                 const topElement = document.createElement('div');
                 topElement.className = 'timeline-top';
-                topElement.style.gridColumn = `${index + 1}`;
-                topElement.style.gridRow = '1';
                 
                 topElement.innerHTML = `
                     <div class="node-number">${index + 1}</div>
                     <div class="node-image" onclick="openModal(${index}, 0)">
-                        <img src="${node.mainImage}">
+                        <img src="${node.mainImage}" alt="阵型 ${index + 1}">
                     </div>
                 `;
-                
-                if (node.variants.length > 0) {
+
+                if (node.variants && node.variants.length > 0) {
                     const variantsHTML = node.variants.map((variant, variantIndex) => `
                         <div class="variant-image"
                              onclick="openModal(${index}, ${variantIndex + 1})"
                              title="变种阵型 ${variantIndex + 1}">
-                            <img src="${variant}">
+                            <img src="${variant}" alt="变种 ${variantIndex + 1}">
                         </div>
-                    `).join('')
+                    `).join('');
                     topElement.innerHTML += `
                         <div class="variant-section">
                             <div class="variant-title">变异原型</div>
@@ -713,13 +823,13 @@
                     `;
                 }
 
-                const infoItemsHTML = node.info.map(item => {
+                const infoItemsHTML = (node.info || []).map(item => {
                     const hasVideos = Array.isArray(item.videos) && item.videos.length > 0;
                     const videoContent = hasVideos ? `
                         <div class="video-scroll-container">
                             <ul class="video-list">
                                 ${item.videos.map(video => {
-                                    _info = videoLists[video]
+                                    const _info = videoLists[video] || { url: '#', title: video, up: { homePage:'#', picture:'', name:'' } };
                                     return `
                                     <li>
                                         <a href="${_info.url}" target="_blank" rel="noopener noreferrer">
@@ -766,16 +876,15 @@
 
                 const bottomElement = document.createElement('div');
                 bottomElement.className = 'timeline-bottom';
-                bottomElement.style.gridColumn = `${index + 1}`;
-                bottomElement.style.gridRow = '2';
                 bottomElement.innerHTML = `
                     <div class="node-info">
                         ${infoItemsHTML}
                     </div>
                 `;
-                
-                timeline.appendChild(topElement);
-                timeline.appendChild(bottomElement);
+
+                itemWrapper.appendChild(topElement);
+                itemWrapper.appendChild(bottomElement);
+                timeline.appendChild(itemWrapper);
             });
         }
 
@@ -796,11 +905,22 @@
             }
 
             const updateTrackWidth = () => {
-                scrollTrack.style.width = `${timeline.scrollWidth}px`;
+                // 只有横屏/大屏时才同步横向宽度
+                const isPortraitSmall = window.matchMedia('(orientation: portrait) and (max-width: 900px)').matches;
+                if (isPortraitSmall) {
+                    scrollTrack.style.width = `0px`;
+                } else {
+                    scrollTrack.style.width = `${timeline.scrollWidth}px`;
+                }
             };
 
             const updateTimelinePosition = () => {
-                timeline.style.transform = `translateX(-${timelineScroll.scrollLeft}px)`;
+                const isPortraitSmall = window.matchMedia('(orientation: portrait) and (max-width: 900px)').matches;
+                if (isPortraitSmall) {
+                    timeline.style.transform = `none`;
+                } else {
+                    timeline.style.transform = `translateX(-${timelineScroll.scrollLeft}px)`;
+                }
             };
 
             const updateAll = () => {
@@ -823,6 +943,7 @@
 
             observer.observe(timeline, { childList: true, subtree: true });
 
+            // 触控拖拽，仅在横向模式启用
             let isPointerDown = false;
             let startPointerX = 0;
             let dragStarted = false;
@@ -830,6 +951,9 @@
             let initialScrollLeft = 0;
 
             const handlePointerDown = (event) => {
+                const isPortraitSmall = window.matchMedia('(orientation: portrait) and (max-width: 900px)').matches;
+                if (isPortraitSmall) return; // 竖屏不启用横向拖动
+
                 if (event.pointerType === 'mouse' && event.button !== 0) {
                     return;
                 }
@@ -844,6 +968,8 @@
             };
 
             const handlePointerMove = (event) => {
+                const isPortraitSmall = window.matchMedia('(orientation: portrait) and (max-width: 900px)').matches;
+                if (isPortraitSmall) return;
                 if (!isPointerDown) {
                     return;
                 }
@@ -914,6 +1040,14 @@
             document.getElementById('imageModal').addEventListener('click', function(event) {
                 if (event.target === this) {
                     closeModal();
+                }
+            });
+
+            // 在窗口旋转或尺寸变化时重新渲染或调整（保持同步）
+            window.addEventListener('orientationchange', () => {
+                // 小优化：重新计算轨道和布局
+                if (window.updateTimelineTrackWidth) {
+                    setTimeout(window.updateTimelineTrackWidth, 120);
                 }
             });
         });

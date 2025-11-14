@@ -504,6 +504,150 @@
                 right: 20px;
             }
         }
+
+        /* 在现有媒体查询基础上扩展，添加针对小屏幕的优化 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                width: 100%;
+                overflow-x: hidden;
+            }
+            
+            .header {
+                margin-bottom: 20px;
+                padding: 15px 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+                line-height: 1.3;
+            }
+            
+            .header p {
+                font-size: 0.95em;
+                line-height: 1.4;
+            }
+            
+            .timeline-container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            /* 时间轴布局调整为更适合移动端的尺寸 */
+            .timeline {
+                grid-auto-columns: 85vw; /* 使用视口宽度单位 */
+                gap: 15px 20px;
+            }
+            
+            .timeline-top,
+            .timeline-bottom {
+                padding: 15px;
+                border-radius: 12px;
+            }
+            
+            .node-number {
+                font-size: 1.5em;
+                margin-bottom: 12px;
+                padding: 6px;
+            }
+            
+            .node-image {
+                height: 140px; /* 减小图片高度 */
+                margin-bottom: 12px;
+            }
+            
+            .variant-section {
+                margin-top: 15px;
+                padding: 12px 10px;
+                min-height: 150px;
+            }
+            
+            .variant-title {
+                font-size: 0.9em;
+                margin-bottom: 10px;
+            }
+            
+            .node-info {
+                padding: 10px;
+            }
+            
+            .info-item {
+                padding: 5px 0;
+                font-size: 0.9em;
+            }
+            
+            /* 视频提示框在移动端调整 */
+            .video-tooltip {
+                width: 280px;
+                max-height: 200px;
+                left: 50%;
+                transform: translateX(-50%) translateY(-100%);
+            }
+            
+            .video-tooltip::before {
+                left: 50%;
+                top: 100%;
+                transform: translateX(-50%) rotate(-135deg);
+            }
+            
+            .video-scroll-container {
+                max-height: 180px;
+            }
+            
+            .up-info {
+                font-size: 0.8em;
+                padding: 0px 0px 4px 14px;
+            }
+            
+            .up-avatar {
+                width: 20px;
+                height: 20px;
+            }
+            
+            /* 模态框优化 */
+            .modal-content {
+                width: 98%;
+                max-width: none;
+            }
+            
+            .close {
+                font-size: 28px;
+                top: 15px;
+                right: 15px;
+            }
+        }
+
+        /* 添加针对超小屏幕的额外优化 */
+        @media (max-width: 480px) {
+            .timeline {
+                grid-auto-columns: 90vw;
+                gap: 12px 15px;
+            }
+            
+            .timeline-top,
+            .timeline-bottom {
+                padding: 12px;
+            }
+            
+            .node-number {
+                font-size: 1.3em;
+            }
+            
+            .node-image {
+                height: 120px;
+            }
+            
+            .header h1 {
+                font-size: 1.6em;
+            }
+            
+            .video-tooltip {
+                width: 250px;
+            }
+        }
     </style>
 </head>
 <body>

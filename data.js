@@ -121,6 +121,31 @@ videoLists = {
         title: "海岛新服博士，66阶段，列妹4006%蓝血",
         url: "https://www.bilibili.com/video/BV1Mq1sBPEoZ",
         up: videoUploaders.dfxl
+    },
+    "BV11hCmBUEeT": {
+        title: "[海岛奇兵] 遗憾收场 小博士71-76阶段（8850%血量加成 耗尽原型无法战胜）",
+        url: "https://www.bilibili.com/video/BV11hCmBUEeT",
+        up: videoUploaders.oo
+    },
+    "BV1cwCSB7EYM": {
+        title: "恐怖小博士70-74阶（75暂未过）继续坐牢去了，不配音了哈",
+        url: "https://www.bilibili.com/video/BV1cwCSB7EYM",
+        up: videoUploaders.jl
+    },
+    "BV1kqCmByELe": {
+        title: "万血目标还未堪见，倒在此地燃尽熄灭，晚安也是早安",
+        url: "https://www.bilibili.com/video/BV1kqCmByELe",
+        up: videoUploaders.jl
+    },
+    "BV1tPC2BEEhd": {
+        title: "恐怖小博士69-75，威胁74摸索了三个小时左右才通关",
+        url: "https://www.bilibili.com/video/BV1tPC2BEEhd",
+        up: videoUploaders.yan
+    },
+    "BV1vRCQBUERt": {
+        title: "海岛奇兵：小博士威胁69（第三梯队），远程遥控能不能起到作用？",
+        url: "https://www.bilibili.com/video/BV1vRCQBUERt",
+        up: videoUploaders.rrs
     }
 }
 
@@ -634,6 +659,14 @@ const timelineData = [
         mainImage: "images/stage7.jpg",
         info: [
             {
+                date: "11.15",
+                stage: "69阶",
+                videos: [
+                    "BV1tPC2BEEhd",
+                    "BV1vRCQBUERt",
+                ]
+            },
+            {
                 date: "11.11",
                 stage: "76阶",
                 videos: [
@@ -656,6 +689,15 @@ const timelineData = [
         mainImage: "images/stage11.jpg",
         info: [
             {
+                date: "11.15",
+                stage: "70阶",
+                videos: [
+                    "BV1cwCSB7EYM",
+                    "BV1tPC2BEEhd",
+                    "BV1vRCQBUERt",
+                ]
+            },
+            {
                 date: "11.8",
                 stage: "74阶",
                 videos: [
@@ -670,6 +712,16 @@ const timelineData = [
         mainImage: "images/stage12.jpg",
         info: [
             {
+                date: "11.15",
+                stage: "71阶",
+                videos: [
+                    "BV11hCmBUEeT",
+                    "BV1cwCSB7EYM",
+                    "BV1tPC2BEEhd",
+                    "BV1vRCQBUERt",
+                ]
+            },
+            {
                 date: "11.8",
                 stage: "75阶",
                 videos: [
@@ -677,6 +729,89 @@ const timelineData = [
                 ]
             },
         ],
+        variants: ["images/stage12_v1.jpg"]
+    },
+    {
+        number: 10,
+        mainImage: "images/stage24.jpg",
+        info: [
+            {
+                date: "11.15",
+                stage: "72阶",
+                videos: [
+                    "BV11hCmBUEeT",
+                    "BV1cwCSB7EYM",
+                    "BV1tPC2BEEhd",
+                    "BV1vRCQBUERt",
+                ]
+            },
+        ],
         variants: []
     },
+    {
+        number: 11,
+        mainImage: "images/stage25.jpg",
+        info: [
+            {
+                date: "11.15",
+                stage: "73阶",
+                videos: [
+                    "BV11hCmBUEeT",
+                    "BV1cwCSB7EYM",
+                    "BV1tPC2BEEhd",
+                    "BV1vRCQBUERt",
+                ]
+            },
+        ],
+        variants: []
+    },
+    {
+        number: 12,
+        mainImage: "images/stage26.jpg",
+        info: [
+            {
+                date: "11.15",
+                stage: "74阶",
+                videos: [
+                    "BV11hCmBUEeT",
+                    "BV1cwCSB7EYM",
+                    "BV1tPC2BEEhd",
+                    "BV1vRCQBUERt",
+                ]
+            },
+        ],
+        variants: []
+    },
+    {
+        number: 13,
+        mainImage: "images/stage27.jpg",
+        info: [
+            {
+                date: "11.15",
+                stage: "75阶",
+                videos: [
+                    "BV11hCmBUEeT",
+                    "BV1kqCmByELe",
+                    "BV1tPC2BEEhd",
+                    "BV1vRCQBUERt",
+                ]
+            },
+        ],
+        variants: ["images/stage27_v1.jpg"]
+    },
+    {
+        number: 14,
+        mainImage: "images/stage28.jpg",
+        info: [
+            {
+                date: "11.15",
+                stage: "76阶",
+                videos: [
+                    "BV11hCmBUEeT",
+                    "BV1kqCmByELe",
+                ]
+            },
+        ],
+        variants: []
+    }
 ];

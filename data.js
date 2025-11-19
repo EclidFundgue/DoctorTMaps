@@ -699,8 +699,8 @@ const timelineData = [
                 ]
             },
             {
-                date: "11.18",
-                stage: "新服68阶",
+                date: "11.15",
+                stage: "68阶",
                 videos: [
                     "BV1AUyEBBEC1",
                 ]
@@ -738,18 +738,12 @@ const timelineData = [
                 ]
             },
             {
-                date: "11.18",
-                stage: "新服69阶",
-                videos: [
-                    "BV1AUyEBBEC1",
-                ]
-            },
-            {
                 date: "11.15",
                 stage: "69阶",
                 videos: [
                     "BV1tPC2BEEhd",
                     "BV1vRCQBUERt",
+                    "BV1AUyEBBEC1",
                 ]
             },
             {

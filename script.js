@@ -30,11 +30,30 @@ function loadMoreStages() {
 // 更新"加载更多"按钮的显示状态
 function updateLoadMoreButton() {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const timelineScroll = document.getElementById('timelineScroll');
+    
+    // 检查是否是竖屏小屏模式
+    const isPortraitSmall = window.matchMedia('(orientation: portrait) and (max-width: 900px)').matches;
+    
+    // 如果已经显示所有阶段，隐藏按钮
     if (currentlyDisplayedStages >= totalStages) {
         loadMoreBtn.classList.add('hidden');
     } else {
-        loadMoreBtn.classList.remove('hidden');
-        loadMoreBtn.textContent = `加载更多 (剩余 ${totalStages - currentlyDisplayedStages}) ▶`;
+        // 在横屏模式下，根据滚动位置决定是否显示按钮
+        // 只有当滚动条在最左边（或接近最左边）时才显示
+        if (!isPortraitSmall && timelineScroll) {
+            const scrollThreshold = 50; // 滚动阈值，小于此值时显示按钮
+            if (timelineScroll.scrollLeft <= scrollThreshold) {
+                loadMoreBtn.classList.remove('hidden');
+                loadMoreBtn.textContent = `加载更多 (剩余 ${totalStages - currentlyDisplayedStages}) ▶`;
+            } else {
+                loadMoreBtn.classList.add('hidden');
+            }
+        } else {
+            // 竖屏模式下始终显示按钮（如果还有更多内容）
+            loadMoreBtn.classList.remove('hidden');
+            loadMoreBtn.textContent = `加载更多 (剩余 ${totalStages - currentlyDisplayedStages}) ▶`;
+        }
     }
 }
 
@@ -181,6 +200,7 @@ function setupScrollSync() {
     const updateAll = () => {
         updateTrackWidth();
         updateTimelinePosition();
+        updateLoadMoreButton(); // 更新按钮显示状态
     };
 
     updateAll();
@@ -188,6 +208,7 @@ function setupScrollSync() {
 
     timelineScroll.addEventListener('scroll', () => {
         updateTimelinePosition();
+        updateLoadMoreButton(); // 根据滚动位置更新按钮显示状态
     }, { passive: true });
 
     window.addEventListener('resize', updateAll);

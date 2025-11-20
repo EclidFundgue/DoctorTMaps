@@ -51,6 +51,38 @@
             user-select: none;
         }
 
+        .load-more-button {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            z-index: 100;
+            white-space: nowrap;
+        }
+
+        .load-more-button:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .load-more-button:active {
+            transform: translateY(-50%) scale(0.98);
+        }
+
+        .load-more-button.hidden {
+            display: none;
+        }
+
         .timeline-scroll {
             overflow-x: auto;
             padding: 12px 0;
@@ -509,6 +541,11 @@
                 top: 10px;
                 right: 20px;
             }
+
+            .load-more-button {
+                font-size: 12px;
+                padding: 10px 16px;
+            }
         }
 
         /* 在现有媒体查询基础上扩展，添加针对小屏幕的优化 */
@@ -666,6 +703,21 @@
                 transform: none !important;
             }
 
+            .load-more-button {
+                position: static;
+                transform: none;
+                width: 100%;
+                margin-bottom: 16px;
+            }
+
+            .load-more-button:hover {
+                transform: scale(1.02);
+            }
+
+            .load-more-button:active {
+                transform: scale(0.98);
+            }
+
             /* 每个节点作为一个块（便于纵向排列和内边距） */
             .timeline-item {
                 display: block;
@@ -767,6 +819,9 @@
         </div>
 
         <div class="timeline-container">
+            <button id="loadMoreBtn" class="load-more-button" onclick="loadMoreStages()">
+                加载更多 ▶
+            </button>
             <div class="timeline-scroll" id="timelineScroll"></div>
             <div class="timeline-wrapper">
             <div class="timeline" id="timeline">
@@ -788,12 +843,56 @@
     <script src="data.js"></script>
     <script>
         let currentImageUrl = null;
+        let currentlyDisplayedStages = 15; // 初始显示15个阶段
+        const stagesPerLoad = 5; // 每次加载5个阶段
+        const totalStages = timelineData.length;
+
+        // 加载更多阶段
+        function loadMoreStages() {
+            const previousScrollLeft = document.getElementById('timelineScroll').scrollLeft;
+            const previousTimelineWidth = document.getElementById('timeline').scrollWidth;
+            
+            currentlyDisplayedStages = Math.min(currentlyDisplayedStages + stagesPerLoad, totalStages);
+            generateTimeline();
+            
+            // 在非竖屏模式下，调整滚动位置以保持视觉连续性
+            const isPortraitSmall = window.matchMedia('(orientation: portrait) and (max-width: 900px)').matches;
+            if (!isPortraitSmall) {
+                requestAnimationFrame(() => {
+                    const timelineScroll = document.getElementById('timelineScroll');
+                    const timeline = document.getElementById('timeline');
+                    const newTimelineWidth = timeline.scrollWidth;
+                    const widthDiff = newTimelineWidth - previousTimelineWidth;
+                    timelineScroll.scrollLeft = previousScrollLeft + widthDiff;
+                });
+            }
+            
+            // 检查是否需要隐藏"加载更多"按钮
+            updateLoadMoreButton();
+        }
+
+        // 更新"加载更多"按钮的显示状态
+        function updateLoadMoreButton() {
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (currentlyDisplayedStages >= totalStages) {
+                loadMoreBtn.classList.add('hidden');
+            } else {
+                loadMoreBtn.classList.remove('hidden');
+                loadMoreBtn.textContent = `加载更多 (剩余 ${totalStages - currentlyDisplayedStages}) ▶`;
+            }
+        }
 
         // 生成时间轴HTML（改为以 .timeline-item 包裹每个节点）
         function generateTimeline() {
             const timeline = document.getElementById('timeline');
             timeline.innerHTML = ''; // 先清空
-            timelineData.forEach((node, index) => {
+            
+            // 只显示最新的 currentlyDisplayedStages 个阶段
+            const startIndex = Math.max(0, totalStages - currentlyDisplayedStages);
+            const displayData = timelineData.slice(startIndex);
+            
+            displayData.forEach((node, index) => {
+                const actualIndex = startIndex + index;
                 const itemWrapper = document.createElement('div');
                 itemWrapper.className = 'timeline-item';
 
@@ -801,16 +900,16 @@
                 topElement.className = 'timeline-top';
                 
                 topElement.innerHTML = `
-                    <div class="node-number">${index + 1}</div>
-                    <div class="node-image" onclick="openModal(${index}, 0)">
-                        <img src="${node.mainImage}" alt="阵型 ${index + 1}">
+                    <div class="node-number">${actualIndex + 1}</div>
+                    <div class="node-image" onclick="openModal(${actualIndex}, 0)">
+                        <img src="${node.mainImage}" alt="阵型 ${actualIndex + 1}">
                     </div>
                 `;
 
                 if (node.variants && node.variants.length > 0) {
                     const variantsHTML = node.variants.map((variant, variantIndex) => `
                         <div class="variant-image"
-                             onclick="openModal(${index}, ${variantIndex + 1})"
+                             onclick="openModal(${actualIndex}, ${variantIndex + 1})"
                              title="变种阵型 ${variantIndex + 1}">
                             <img src="${variant}" alt="变种 ${variantIndex + 1}">
                         </div>
@@ -1032,6 +1131,7 @@
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
             generateTimeline();
+            updateLoadMoreButton();
             setupScrollSync();
             
             // 关闭模态框

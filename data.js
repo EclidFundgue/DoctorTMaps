@@ -172,6 +172,11 @@ videoLists = {
         url: "https://www.bilibili.com/video/BV1JjyEB8EvU",
         up: videoUploaders.wskxs
     },
+    "BV1p7ypBLEmq": {
+        title: "11.18小博士70-74，75无法战胜差个一百多万血没能爆掉",
+        url: "https://www.bilibili.com/video/BV1p7ypBLEmq",
+        up: videoUploaders.ncqm
+    },
 }
 
 const timelineData = [
@@ -661,6 +666,7 @@ const timelineData = [
                     "BV1L5yGBqEev",
                     "BV1owyJBZE3p",
                     "BV1JjyEB8EvU",
+                    "BV1p7ypBLEmq",
                 ]
             },
             {
@@ -696,6 +702,7 @@ const timelineData = [
                     "BV1L5yGBqEev",
                     "BV1owyJBZE3p",
                     "BV1JjyEB8EvU",
+                    "BV1p7ypBLEmq",
                 ]
             },
             {
@@ -735,6 +742,7 @@ const timelineData = [
                 videos: [
                     "BV1L5yGBqEev",
                     "BV1owyJBZE3p",
+                    "BV1p7ypBLEmq",
                 ]
             },
             {
@@ -773,6 +781,7 @@ const timelineData = [
                 stage: "73阶",
                 videos: [
                     "BV1L5yGBqEev",
+                    "BV1p7ypBLEmq",
                 ]
             },
             {
@@ -803,6 +812,7 @@ const timelineData = [
                 stage: "74阶",
                 videos: [
                     "BV1L5yGBqEev",
+                    "BV1p7ypBLEmq",
                 ]
             },
             {

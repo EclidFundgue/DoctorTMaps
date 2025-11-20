@@ -30,7 +30,19 @@ function loadMoreStages() {
 // 更新"加载更多"按钮的显示状态
 function updateLoadMoreButton() {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
-    if (currentlyDisplayedStages >= totalStages) {
+    const timelineScroll = document.getElementById('timelineScroll');
+    
+    // 检查是否所有阶段都已加载
+    const allStagesLoaded = currentlyDisplayedStages >= totalStages;
+    
+    // 检查是否处于竖屏模式
+    const isPortraitSmall = window.matchMedia('(orientation: portrait) and (max-width: 900px)').matches;
+    
+    // 检查滚动位置是否在左侧（阈值为5像素，考虑精度问题）
+    const isAtLeftEdge = !timelineScroll || timelineScroll.scrollLeft <= 5;
+    
+    // 按钮显示条件：未加载完所有阶段 且 (竖屏模式 或 滚动条在左边)
+    if (allStagesLoaded || (!isPortraitSmall && !isAtLeftEdge)) {
         loadMoreBtn.classList.add('hidden');
     } else {
         loadMoreBtn.classList.remove('hidden');
@@ -181,6 +193,7 @@ function setupScrollSync() {
     const updateAll = () => {
         updateTrackWidth();
         updateTimelinePosition();
+        updateLoadMoreButton(); // 窗口变化时更新加载更多按钮的显示状态
     };
 
     updateAll();
@@ -188,6 +201,7 @@ function setupScrollSync() {
 
     timelineScroll.addEventListener('scroll', () => {
         updateTimelinePosition();
+        updateLoadMoreButton(); // 滚动时更新加载更多按钮的显示状态
     }, { passive: true });
 
     window.addEventListener('resize', updateAll);

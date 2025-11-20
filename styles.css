@@ -1,0 +1,803 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #2c3e50;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+.header h1 {
+    color: #34495e;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.header p {
+    color: #7f8c8d;
+    font-size: 1.1em;
+}
+
+.timeline-container {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+    user-select: none;
+}
+
+.load-more-button {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #5dade2 0%, #3498db 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    transition: all 0.3s ease;
+    z-index: 100;
+    white-space: nowrap;
+}
+
+.load-more-button:hover {
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+}
+
+.load-more-button:active {
+    transform: translateY(-50%) scale(0.98);
+}
+
+.load-more-button.hidden {
+    display: none;
+}
+
+.timeline-scroll {
+    overflow-x: auto;
+    padding: 12px 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+.timeline-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.timeline-scroll::-webkit-scrollbar-track {
+    background: #ecf0f1;
+    border-radius: 4px;
+}
+
+.timeline-scroll::-webkit-scrollbar-thumb {
+    background: #bdc3c7;
+    border-radius: 4px;
+}
+
+.timeline-scroll::-webkit-scrollbar-thumb:hover {
+    background: #95a5a6;
+}
+
+.timeline-scroll-track {
+    height: 1px;
+}
+
+.timeline-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+/* 默认（桌面/横屏）时间轴：横向 grid */
+.timeline {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: auto auto;
+    grid-auto-columns: 280px;
+    gap: 24px 32px;
+    width: max-content;
+    align-items: flex-start;
+    transform: translateX(0);
+    will-change: transform;
+}
+
+/* 新增：timeline-item 包装（在竖屏生效，但桌面也保留样式） */
+.timeline-item {
+    display: contents; /* 默认不影响桌面布局 */
+}
+
+.timeline-top,
+.timeline-bottom {
+    position: relative;
+    z-index: 1;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e8e8e8;
+}
+
+.timeline-top:hover,
+.timeline-bottom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+    z-index: 20;
+}
+
+.node-number {
+    text-align: center;
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #3498db;
+    margin-bottom: 15px;
+    padding: 8px;
+    background: #ecf0f1;
+    border-radius: 10px;
+}
+
+.node-image {
+    width: 100%;
+    height: 180px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px solid #e9ecef;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.node-image:hover {
+    border-color: #3498db;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.node-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.node-info {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px;
+    position: relative;
+    z-index: 0;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #e9ecef;
+    position: relative;
+    cursor: default;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.video-tooltip {
+    position: absolute;
+    top: -105%;
+    left: calc(100% + 12px);
+    width: 350px;
+    max-height: 255px;
+    background: #ffffff;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 10px 12px;
+    padding-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    min-height: 72px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%) translateX(6px);
+    transition: opacity 0.1s ease, transform 0.1s ease, visibility 0.1s;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.info-item:hover .video-tooltip,
+.info-item:focus-within .video-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+.video-tooltip::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -6px;
+    width: 12px;
+    height: 12px;
+    background: inherit;
+    border-bottom: 1px solid #e1e8ed;
+    border-left: 1px solid #e1e8ed;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.video-tooltip-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+}
+
+/* 视频滚动容器 */
+.video-scroll-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #e1e8ed;
+    border-radius: 6px;
+    background: #fafbfc;
+    margin-top: 4px;
+    flex: 1;
+    min-height: 0;
+    min-height: 60px;
+    max-height: 250px;
+}
+
+/* 滚动条样式 */
+.video-scroll-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.video-scroll-container::-webkit-scrollbar-track {
+    background: #f1f3f4;
+    border-radius: 3px;
+}
+
+.video-scroll-container::-webkit-scrollbar-thumb {
+    background: #c8d1d9;
+    border-radius: 3px;
+}
+
+.video-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #a8b5c1;
+}
+
+.video-list {
+    list-style: none;
+    margin: 0;
+    padding: 8px 8px 0px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.video-list a {
+    color: #2980b9;
+    text-decoration: none;
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.video-list a::before {
+    content: "▶";
+    font-size: 0.7em;
+}
+
+.video-list a:hover {
+    text-decoration: underline;
+}
+
+.video-empty {
+    color: #95a5a6;
+    font-size: 0.9em;
+    padding: 16px;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.up-info {
+    margin-top: 8px;
+    padding: 0px 0px 6px 18px;
+    font-size: 0.85em;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.up-link {
+    color: #fb7299 !important;
+    text-decoration: none !important;
+    font-weight: 500;
+}
+
+.up-link:hover {
+    text-decoration: underline !important;
+    color: #ff9db5 !important;
+}
+
+.up-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: #f5f5f5;
+    border: 1px solid #e1e8ed;
+}
+
+.up-avatar a::before {
+    content: none;
+}
+
+.up-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.up-details {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.up-details::before {
+    display: none !important;
+}
+
+.video-list li {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.video-list li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.date {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.stage {
+    color: #7d7d7d;
+    font-weight: bold;
+    background: #ffeaa7;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.9em;
+}
+
+.variant-images {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.variant-image {
+    background: #f1f2f6;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #dfe4ea;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.variant-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.variant-section {
+    margin-top: 20px;
+    background: #f8f9fc;
+    border: 1px solid #e1e6ef;
+    border-radius: 10px;
+    padding: 16px 14px;
+    min-height: 180px;
+}
+
+.variant-title {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.variant-image:hover {
+    border-color: #3498db;
+    transform: scale(1.05);
+}
+
+/* 图片放大模态框样式 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    position: relative;
+    margin: auto;
+    display: block;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: zoomIn 0.3s ease;
+}
+
+.modal-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    z-index: 1001;
+}
+
+.close:hover {
+    color: #bbb;
+    transform: scale(1.1);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from { transform: translateY(-50%) scale(0.8); opacity: 0; }
+    to { transform: translateY(-50%) scale(1); opacity: 1; }
+}
+
+/* 常规小屏优化（保留横向时间轴的紧凑样式） */
+@media (max-width: 768px) {
+    .timeline {
+        grid-auto-columns: 240px;
+        gap: 20px 24px;
+    }
+    
+    .header h1 {
+        font-size: 2em;
+    }
+
+    .modal-content {
+        width: 95%;
+    }
+
+    .close {
+        font-size: 30px;
+        top: 10px;
+        right: 20px;
+    }
+
+    .load-more-button {
+        font-size: 12px;
+        padding: 10px 16px;
+    }
+}
+
+/* 在现有媒体查询基础上扩展，添加针对小屏幕的优化 */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .header {
+        margin-bottom: 20px;
+        padding: 15px 10px;
+    }
+    
+    .header h1 {
+        font-size: 1.8em;
+        line-height: 1.3;
+    }
+    
+    .header p {
+        font-size: 0.95em;
+        line-height: 1.4;
+    }
+    
+    .timeline-container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    /* 时间轴布局调整为更适合移动端的尺寸（默认仍为横向滚动） */
+    .timeline {
+        grid-auto-columns: 85vw; /* 使用视口宽度单位 */
+        gap: 15px 20px;
+    }
+    
+    .timeline-top,
+    .timeline-bottom {
+        padding: 15px;
+        border-radius: 12px;
+    }
+    
+    .node-number {
+        font-size: 1.5em;
+        margin-bottom: 12px;
+        padding: 6px;
+    }
+    
+    .node-image {
+        height: 140px; /* 减小图片高度 */
+        margin-bottom: 12px;
+    }
+    
+    .variant-section {
+        margin-top: 15px;
+        padding: 12px 10px;
+        min-height: 150px;
+    }
+    
+    .variant-title {
+        font-size: 0.9em;
+        margin-bottom: 10px;
+    }
+    
+    .node-info {
+        padding: 10px;
+    }
+    
+    .info-item {
+        padding: 5px 0;
+        font-size: 0.9em;
+    }
+    
+    /* 视频提示框在移动端调整 */
+    .video-tooltip {
+        width: 280px;
+        max-height: 200px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-100%);
+    }
+    
+    .video-tooltip::before {
+        left: 50%;
+        top: 100%;
+        transform: translateX(-50%) rotate(-135deg);
+    }
+    
+    .video-scroll-container {
+        max-height: 180px;
+    }
+    
+    .up-info {
+        font-size: 0.8em;
+        padding: 0px 0px 4px 14px;
+    }
+    
+    .up-avatar {
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* 模态框优化 */
+    .modal-content {
+        width: 98%;
+        max-width: none;
+    }
+    
+    .close {
+        font-size: 28px;
+        top: 15px;
+        right: 15px;
+    }
+}
+
+/* 添加针对超小屏幕的额外优化 */
+@media (max-width: 480px) {
+    .timeline {
+        grid-auto-columns: 90vw;
+        gap: 12px 15px;
+    }
+    
+    .timeline-top,
+    .timeline-bottom {
+        padding: 12px;
+    }
+    
+    .node-number {
+        font-size: 1.3em;
+    }
+    
+    .node-image {
+        height: 120px;
+    }
+    
+    .header h1 {
+        font-size: 1.6em;
+    }
+    
+    .video-tooltip {
+        width: 250px;
+    }
+}
+
+/* ========== 竖屏专有适配（portrait） ========== */
+@media (orientation: portrait) and (max-width: 900px) {
+    /* 把时间轴改为纵向卡片列表 */
+    .timeline {
+        display: flex !important;
+        flex-direction: column;
+        width: 100% !important;
+        gap: 16px !important;
+        transform: none !important;
+    }
+
+    .load-more-button {
+        position: static;
+        transform: none;
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+    .load-more-button:hover {
+        transform: scale(1.02);
+    }
+
+    .load-more-button:active {
+        transform: scale(0.98);
+    }
+
+    /* 每个节点作为一个块（便于纵向排列和内边距） */
+    .timeline-item {
+        display: block;
+        width: 100%;
+    }
+
+    /* 将 top 与 bottom 作为堆叠的两块内容 */
+    .timeline-top,
+    .timeline-bottom {
+        width: 100%;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        border-radius: 12px;
+    }
+
+    .timeline-top {
+        margin-bottom: 10px;
+    }
+
+    /* 隐藏横向滚动轨道，因为竖屏不用横向同步 */
+    .timeline-scroll {
+        display: none;
+    }
+
+    /* Tooltip 改为内联展示（触控友好） */
+    .video-tooltip {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        background: transparent;
+        padding: 0;
+        max-height: none;
+    }
+
+    .video-tooltip .video-tooltip-title {
+        display: none;
+    }
+
+    .video-scroll-container {
+        border: 1px solid #e6edf3;
+        background: #fff;
+        border-radius: 8px;
+        padding: 8px;
+        max-height: 260px;
+        margin-top: 8px;
+    }
+
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .info-item > .date,
+    .info-item > .stage {
+        display: inline-block;
+    }
+
+    .node-image {
+        height: auto;
+        aspect-ratio: 4 / 3;
+    }
+
+    /* 模态框在竖屏下优化为更贴合全屏预览 */
+    .modal-content {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        transform: none;
+    }
+
+    .modal-image {
+        max-width: 96vw;
+        max-height: 92vh;
+        border-radius: 8px;
+    }
+
+    .close {
+        top: 18px;
+        right: 18px;
+        font-size: 32px;
+    }
+}

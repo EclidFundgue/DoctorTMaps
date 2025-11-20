@@ -1,6 +1,6 @@
 let currentImageUrl = null;
-let currentlyDisplayedStages = 15; // 初始显示15个阶段
-const stagesPerLoad = 5; // 每次加载5个阶段
+let currentlyDisplayedStages = 10; // 初始显示阶段数
+const stagesPerLoad = 5; // 每次加载阶段数
 const totalStages = timelineData.length;
 
 // 加载更多阶段

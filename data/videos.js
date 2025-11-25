@@ -138,5 +138,20 @@ const videoLists = {
         title: "11.18小博士70-74，75无法战胜差个一百多万血没能爆掉",
         url: "https://www.bilibili.com/video/BV1p7ypBLEmq",
         up: videoUploaders.ncqm
+    },
+    "BV1QBUsBVEDX": {
+        title: "恐怖小博士70-73阶，74阶无解已降级抓紧改雕打螃蟹去了",
+        url: "https://www.bilibili.com/video/BV1QBUsBVEDX",
+        up: videoUploaders.jl
+    },
+    "BV11uUsBPEgT": {
+        title: "海岛新服博士，71阶段，列妹3912%蓝血",
+        url: "https://www.bilibili.com/video/BV11uUsBPEgT",
+        up: videoUploaders.dfxl
+    },
+    "BV12VUKBmEaD": {
+        title: "终究还是败了（66~72未通关）",
+        url: "https://www.bilibili.com/video/BV12VUKBmEaD",
+        up: videoUploaders.wskxs
     }
 };

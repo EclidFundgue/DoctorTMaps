@@ -1,6 +1,5 @@
 const timelineData = [
     {
-        number: -13,
         mainImage: "images/stage23.jpg",
         info: [
             {
@@ -18,7 +17,6 @@ const timelineData = [
         variants: []
     },
     {
-        number: -12,
         mainImage: "images/stage22.jpg",
         info: [
             {
@@ -36,7 +34,6 @@ const timelineData = [
         variants: []
     },
     {
-        number: -11,
         mainImage: "images/stage21.jpg",
         info: [
             {
@@ -58,7 +55,6 @@ const timelineData = [
         variants: []
     },
     {
-        number: -10,
         mainImage: "images/stage20.jpg",
         info: [
             {
@@ -81,7 +77,6 @@ const timelineData = [
         variants: []
     },
     {
-        number: -9,
         mainImage: "images/stage19.jpg",
         info: [
             {
@@ -104,7 +99,6 @@ const timelineData = [
         variants: ["images/stage19_v1.jpg"]
     },
     {
-        number: -8,
         mainImage: "images/stage18.jpg",
         info: [
             {
@@ -133,7 +127,6 @@ const timelineData = [
         variants: []
     },
     {
-        number: -7,
         mainImage: "images/stage17.jpg",
         info: [
             {
@@ -162,7 +155,6 @@ const timelineData = [
         variants: ["images/stage17_v1.jpg"]
     },
     {
-        number: -6,
         mainImage: "images/stage13.jpg",
         info: [
             { date: "11.4", stage: "67阶" },
@@ -179,7 +171,6 @@ const timelineData = [
         variants: []
     },
     {
-        number: -5,
         mainImage: "images/stage14.jpg",
         info: [
             { date: "11.4", stage: "68阶" },
@@ -195,7 +186,6 @@ const timelineData = [
         variants: []
     },
     {
-        number: -4,
         mainImage: "images/stage15.jpg",
         info: [
             { date: "11.4", stage: "69阶" },
@@ -204,7 +194,6 @@ const timelineData = [
         variants: ["images/stage15_v1.jpg"]
     },
     {
-        number: -3,
         mainImage: "images/stage16.jpg",
         info: [
             {
@@ -219,7 +208,6 @@ const timelineData = [
         variants: []
     },
     {
-        number: -2,
         mainImage: "images/stage10.jpg",
         info: [
             {
@@ -249,7 +237,6 @@ const timelineData = [
         variants: []
     },
     {
-        number: -1,
         mainImage: "images/stage9.jpg",
         info: [
             {
@@ -281,7 +268,6 @@ const timelineData = [
         variants: ["images/stage9_v1.jpg"]
     },
     {
-        number: 0,
         mainImage: "images/stage8.jpg",
         info: [
             {
@@ -313,9 +299,15 @@ const timelineData = [
         variants: ["images/stage8_v1.jpg"]
     },
     {
-        number: 1,
         mainImage: "images/stage1.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "62阶",
+                videos: [
+                    "BV13SUQBDEp8",
+                ]
+            },
             {
                 date: "11.11",
                 stage: "70阶",
@@ -354,9 +346,15 @@ const timelineData = [
         variants: ["images/stage1_v1.jpg"]
     },
     {
-        number: 2,
         mainImage: "images/stage2.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "63阶",
+                videos: [
+                    "BV13SUQBDEp8",
+                ]
+            },
             {
                 date: "11.18",
                 stage: "67阶",
@@ -394,9 +392,15 @@ const timelineData = [
         variants: []
     },
     {
-        number: 3,
         mainImage: "images/stage3.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "64阶",
+                videos: [
+                    "BV13SUQBDEp8",
+                ]
+            },
             {
                 date: "11.18",
                 stage: "68阶",
@@ -435,9 +439,15 @@ const timelineData = [
         variants: ["images/stage3_v1.jpg"]
     },
     {
-        number: 4,
         mainImage: "images/stage4.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "65阶",
+                videos: [
+                    "BV13SUQBDEp8",
+                ]
+            },
             {
                 date: "11.18",
                 stage: "69阶",
@@ -475,9 +485,16 @@ const timelineData = [
         variants: ["images/stage4_v1.jpg"]
     },
     {
-        number: 5,
         mainImage: "images/stage5.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "66阶",
+                videos: [
+                    "BV1DxUDB7EFu",
+                    "BV13SUQBDEp8",
+                ]
+            },
             {
                 date: "11.18",
                 stage: "70阶",
@@ -511,9 +528,15 @@ const timelineData = [
         variants: ["images/stage5_v1.jpg"]
     },
     {
-        number: 6,
         mainImage: "images/stage6.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "67阶",
+                videos: [
+                    "BV1DxUDB7EFu",
+                ]
+            },
             {
                 date: "11.18",
                 stage: "71阶",
@@ -552,9 +575,15 @@ const timelineData = [
         variants: ["images/stage6_v1.jpg"]
     },
     {
-        number: 7,
         mainImage: "images/stage7.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "68阶",
+                videos: [
+                    "BV1DxUDB7EFu",
+                ]
+            },
             {
                 date: "11.18",
                 stage: "72阶",
@@ -592,9 +621,15 @@ const timelineData = [
         variants: ["images/stage7_v1.jpg"]
     },
     {
-        number: 8,
         mainImage: "images/stage11.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "69阶",
+                videos: [
+                    "BV1DxUDB7EFu",
+                ]
+            },
             {
                 date: "11.22",
                 stage: "66阶",
@@ -630,9 +665,18 @@ const timelineData = [
         variants: []
     },
     {
-        number: 9,
         mainImage: "images/stage12.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "70阶",
+                videos: [
+                    "BV1rkUUBZEe1",
+                    "BV12iUXBEEXj",
+                    "BV1jqUQBfEm6",
+                    "BV1DxUDB7EFu",
+                ]
+            },
             {
                 date: "11.22",
                 stage: "67阶",
@@ -669,9 +713,19 @@ const timelineData = [
         variants: ["images/stage12_v1.jpg"]
     },
     {
-        number: 10,
         mainImage: "images/stage24.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "71阶",
+                videos: [
+                    "BV1vcUQBWEnT",
+                    "BV1rkUUBZEe1",
+                    "BV12iUXBEEXj",
+                    "BV1jqUQBfEm6",
+                    "BV1DxUDB7EFu",
+                ]
+            },
             {
                 date: "11.22",
                 stage: "68阶",
@@ -700,9 +754,19 @@ const timelineData = [
         variants: []
     },
     {
-        number: 11,
         mainImage: "images/stage25.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "72阶",
+                videos: [
+                    "BV1vcUQBWEnT",
+                    "BV1rkUUBZEe1",
+                    "BV12iUXBEEXj",
+                    "BV1jqUQBfEm6",
+                    "BV1DxUDB7EFu",
+                ]
+            },
             {
                 date: "11.22",
                 stage: "69阶",
@@ -725,9 +789,18 @@ const timelineData = [
         variants: []
     },
     {
-        number: 12,
         mainImage: "images/stage26.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "73阶",
+                videos: [
+                    "BV1vcUQBWEnT",
+                    "BV1rkUUBZEe1",
+                    "BV12iUXBEEXj",
+                    "BV1jqUQBfEm6",
+                ]
+            },
             {
                 date: "11.22",
                 stage: "70阶",
@@ -751,9 +824,18 @@ const timelineData = [
         variants: []
     },
     {
-        number: 13,
         mainImage: "images/stage27.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "74阶",
+                videos: [
+                    "BV1vcUQBWEnT",
+                    "BV1rkUUBZEe1",
+                    "BV12iUXBEEXj",
+                    "BV1jqUQBfEm6",
+                ]
+            },
             {
                 date: "11.22",
                 stage: "71阶",
@@ -777,9 +859,18 @@ const timelineData = [
         variants: ["images/stage27_v1.jpg"]
     },
     {
-        number: 14,
         mainImage: "images/stage28.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "75阶",
+                videos: [
+                    "BV1vcUQBWEnT",
+                    "BV1rkUUBZEe1",
+                    "BV12iUXBEEXj",
+                    "BV1jqUQBfEm6",
+                ]
+            },
             {
                 date: "11.22",
                 stage: "72阶",
@@ -800,9 +891,18 @@ const timelineData = [
         variants: ["images/stage28_v1.jpg"]
     },
     {
-        number: 15,
         mainImage: "images/stage29.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "76阶",
+                videos: [
+                    "BV1SeUXBSEGC",
+                    "BV1rkUUBZEe1",
+                    "BV12iUXBEEXj",
+                    "BV1jqUQBfEm6",
+                ]
+            },
             {
                 date: "11.22",
                 stage: "73阶",
@@ -811,12 +911,18 @@ const timelineData = [
                 ]
             },
         ],
-        variants: []
+        variants: ["images/stage29_v1.jpg"]
     },
     {
-        number: 16,
         mainImage: "images/stage30.jpg",
         info: [
+            {
+                date: "11.25",
+                stage: "77阶",
+                videos: [
+                    "BV1vcUQBWEnT",
+                ]
+            },
             {
                 date: "11.22",
                 stage: "74阶",
@@ -825,6 +931,6 @@ const timelineData = [
                 ]
             },
         ],
-        variants: []
+        variants: ["images/stage30_v1.jpg"]
     },
 ];

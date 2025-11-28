@@ -153,5 +153,40 @@ const videoLists = {
         title: "终究还是败了（66~72未通关）",
         url: "https://www.bilibili.com/video/BV12VUKBmEaD",
         up: videoUploaders.wskxs
+    },
+    "BV1vcUQBWEnT": {
+        title: "[海岛奇兵] 小博士71-77（爆本9346%血量加成 细节拉满）",
+        url: "https://www.bilibili.com/video/BV1vcUQBWEnT",
+        up: videoUploaders.oo
+    },
+    "BV1SeUXBSEGC": {
+        title: "[海岛奇兵] 补发一下76阶段",
+        url: "https://www.bilibili.com/video/BV1SeUXBSEGC",
+        up: videoUploaders.oo
+    },
+    "BV1rkUUBZEe1": {
+        title: "恐怖小博士70-76阶，血清神力，竞速赛了，慢者食尘",
+        url: "https://www.bilibili.com/video/BV1rkUUBZEe1",
+        up: videoUploaders.jl
+    },
+    "BV12iUXBEEXj": {
+        title: "海岛奇兵：小博士威胁70（第二梯队），75阶段郁闷死我了，火箭只打妹子啊，不过好在通关了",
+        url: "https://www.bilibili.com/video/BV12iUXBEEXj",
+        up: videoUploaders.rrs
+    },
+    "BV1jqUQBfEm6": {
+        title: "恐怖小博士70-76，血清神力40分钟速通",
+        url: "https://www.bilibili.com/video/BV1jqUQBfEm6",
+        up: videoUploaders.yan
+    },
+    "BV1DxUDB7EFu": {
+        title: "海岛新服，66-72阶段，感受血清暴力，4124%蓝血",
+        url: "https://www.bilibili.com/video/BV1DxUDB7EFu",
+        up: videoUploaders.dfxl
+    },
+    "BV13SUQBDEp8": {
+        title: "1能代打小博士62-66阶，你们说我开播代打小博士怎么样（）",
+        url: "https://www.bilibili.com/video/BV13SUQBDEp8",
+        up: videoUploaders.jl
     }
 };
